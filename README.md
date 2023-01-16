@@ -30,7 +30,7 @@
 
 📖 문제 선정 참고 레퍼런스
 - 코딩테스트 나올만한 유형의 추천문제 모아논 깃헙 참고 ➡️ [https://github.com/tony9402/baekjoon]
-- "이것이 퓌업을 위한 코딩테스트다 with 파이썬" 추천문제 참고 ➡️ [https://github.com/ndb796/python-for-coding-test]
+- "이것이 취업을 위한 코딩테스트다 with 파이썬" 추천문제 참고 ➡️ [https://github.com/ndb796/python-for-coding-test]
 </br>
 
 | 주차 | 발표자 | 문제 유형 | 
