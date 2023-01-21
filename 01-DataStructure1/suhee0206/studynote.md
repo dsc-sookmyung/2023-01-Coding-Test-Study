@@ -1,6 +1,184 @@
 # Stack, Queue, Deque
 
-#### [9012 괄호](https://www.acmicpc.net/problem/9012)
+## 목차
+
+- **[개념](#개념)**
+  - [Stack](#stack)
+  - [Queue](#queue)
+  - [Deque](#deque)
+- **[문제](#문제)**
+  - [9012 괄호](#9012-괄호)
+  - [1158 요세푸스 문제](#1158-요세푸스-문제)
+  - [1966 프린터 큐](#1966-프린터-큐)
+  - [10799 쇠막대기](#10799-쇠막대기)
+
+## 개념
+
+### Stack
+
+#### 스택의 개념
+
+**LIFO**(Last in First Out) 자료구조
+
+![represent the LIFO principle by using push and pop operation](https://cdn.programiz.com/sites/tutorial2program/files/stack.png)
+
+_출처: https://www.programiz.com/dsa/stack_
+
+#### 스택의 연산
+
+- **push**: 스택의 가장 위에 데이터 추가 
+- **pop**: 스택의 가장 위에 있는 데이터 제거 
+- **isEmpty**: 스택이 비어있는지 확인 
+
+#### 스택의 구현
+
+```python
+# Stack implementation in python
+
+def create_stack():
+  stack = []
+  return stack
+
+def is_empty(stack):
+  return len(stack) == 0
+
+def push(stack, item):
+  stack.append(item)
+ 
+def pop(stack):
+  if is_empty(stack):
+    return
+  return stack.pop()
+
+stack = create_stack()
+push(stack, 1)
+pop(stack)
+```
+
+#### 스택의 시간 복잡도 Big O
+
+- Insertion(`push`): `O(1)`
+- Deletion(`pop`):  `O(1)`
+
+-  Search: `O(n)`
+
+
+
+### Queue
+
+#### 큐의 개념
+
+**FIFO**(First in First Out) 자료구조
+
+![Representation of Queue in first in first out principle](https://cdn.programiz.com/sites/tutorial2program/files/queue.png)
+
+_출처: https://www.programiz.com/dsa/queue_
+
+#### 큐의 연산
+
+- **enqueue**: 큐의 맨 뒤에 데이터 추가
+- **dequeue**: 큐의 맨 앞에 있는 데이터 삭제
+- **front**: 큐의 가장 첫 데이터의 위치를 가리키는 포인터
+- **rear**: 큐의 가장 마지막 데이터의 위치를 가리키는 포인터
+
+#### 큐의 구현
+
+```python
+# Queue implementation using collections.deque in Python
+from collections import deque
+
+queue = deque()
+queue.append(1) # enqueue
+queue.popleft() # dequeue
+```
+
+#### 큐의 시간 복잡도 Big O
+
+- Insertion(`append`): `O(1)`
+- Deletion(`popleft`):  `O(1)`
+
+-  Search: `O(n)`
+
+#### 일반적인 큐의 단점과 개선된 큐
+
+일반적인 큐의 단점: 큐에 빈 메모리가 남아있더라도 꽉 차있는 것으로 판단할 수 있다. (rear가 배열의 끝에 도달한 경우)
+
+⇒ **원형 큐**
+
+마지막 요소가 첫 번째 요소를 가리킨다.
+
+![Circular queue ](https://cdn.programiz.com/sites/tutorial2program/files/circular-queue.png)
+
+_출처: https://www.programiz.com/dsa/types-of-queue
+
+```python
+if rear + 1 == len(queue):
+	rear = (rear+1) % len(queue)
+```
+
+원형 큐의 단점: 메모리 공간은 잘 활용하지만 배열로 구현되어 있기 때문에 큐의 크기가 제한된다.
+
+⇒ **연결(linked list) 큐**
+
+큐의 크기에 제한이 없고, 삽입과 삭제가 편리하다.
+
+
+
+### Deque
+
+#### 덱의 개념
+
+양방향 큐(Doubled Ended Queue)라고도 불리는 덱은 자료의 삽입과 삭제를 양쪽 끝에서 가능하게 하는 자료구조
+
+![representation of deque data structure](https://cdn.programiz.com/sites/tutorial2program/files/deque.png)
+
+_출처: https://www.programiz.com/dsa/deque_
+
+#### 덱의 종류
+
+- **Input Restricted Deque(Scroll)**: 입력은 한쪽에서만 가능하고, 삭제는 양쪽 끝에서 가능하다.
+- **Output Restricted Deque(Shelf)**: 삭제는 한쪽에서만 가능하고, 입력은 양쪽에서 가능하다.
+
+#### 덱의 연산
+
+- **appendleft**: 덱의 왼쪽 끝(시작)에 데이터 삽입
+- **append**: 덱의 오른쪽 끝(마지막)에 데이터 삽입
+- **popleft**: 덱의 왼쪽 끝(시작)에 있는 데이터 삭제
+- **pop**: 덱의 오른쪽 끝(마지막)에 있는 데이터 삭제
+
+#### 덱의 구현
+
+```python
+# Deque implementation using collections.deque in Python
+from collections import deque
+
+# Insertion and Deletion
+deq = deque()
+deq.appendleft(1)
+deq.append(0)
+deq.popleft()
+deq.pop()
+
+# rotate(num): 덱을 num만큼 회전
+deq = deque([1,2,3,4,5])
+deq.rotate(1) 
+print(deq) # deque([5,1,2,3,4])
+
+# remove(item): 덱에서 item을 찾아 삭제
+deq.remove(3)
+print(deq) # deque([5,1,2,4])
+```
+
+#### 덱의 시간 복잡도 Big O
+
+- Insertion(`append` & `appendleft`): `O(1)`
+- Deletion(`popleft` & `pop`):  `O(1)`
+
+
+
+## 문제
+
+### [9012 괄호](https://www.acmicpc.net/problem/9012)
 
 문제) 올바른 괄호 문자열(VPS)인지 아닌지 판단하라.
 
@@ -49,7 +227,7 @@ for _ in range(count):
 
 
 
-#### [1158 요세푸스 문제](https://www.acmicpc.net/problem/1158)
+### [1158 요세푸스 문제](https://www.acmicpc.net/problem/1158)
 
 문제) N명의 사람이 원을 이루면서 앉아있고 K번째 사람을 제거할 때, 원에서 사람들이 제거되는 순서인 (N, K)-요세푸스 순열을 구하라.
 
@@ -84,7 +262,7 @@ print('>')
 
 
 
-#### [1966 프린터 큐](https://www.acmicpc.net/problem/1966)
+### [1966 프린터 큐](https://www.acmicpc.net/problem/1966)
 
 문제) Queue의 가장 앞에 있는 문서의 '중요도'를 확인했을 때, 나머지 문서들 중 현재 문서보다 중요도가 높은 문서가 하나라도 있다면, 이 문서를 인쇄하지 않고 Queue의 가장 뒤에 재배치 한다. 그렇지 않다면 바로 인쇄를 한다고 했을 때, 궁금한 문서가 몇 번째로 인쇄되는지 출력하라. 
 
@@ -122,7 +300,7 @@ while T:
 
 
 
-#### [10799 쇠막대기](https://www.acmicpc.net/problem/10799)
+### [10799 쇠막대기](https://www.acmicpc.net/problem/10799)
 
 문제) 쇠막대기와 레이저의 배치를 나타내는 괄호 표현이 주어졌을 때, 잘려진 조각의 총 개수를 구하라. 
 
