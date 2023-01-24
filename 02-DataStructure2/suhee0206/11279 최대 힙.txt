@@ -1,0 +1,16 @@
+import sys
+import heapq
+
+read = sys.stdin.readline
+N = int(read())
+
+h = []
+for _ in range(N):
+  x = int(read())
+  if x>0:
+    heapq.heappush(h, (-1)*x)
+  elif x==0:
+    if len(h):
+      print((-1)*heapq.heappop(h))
+    else:
+      print(0)
