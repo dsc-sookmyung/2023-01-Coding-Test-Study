@@ -17,7 +17,7 @@
   - [14425 문자열 집합](#14425-문자열-집합)
   - [11279 최대 힙](#11279-최대-힙)
   - [2075 N번째 큰 수](#2075-N번째-큰-수)
-  - 
+  - [21939 문제 추천 시스템 Version 1](#21939-문제-추천-시스템-Version-1)
 - **[참고 자료](#참고-자료)**
 
 
@@ -417,6 +417,87 @@ for i in range(1, N):
     heapq.heappop(h)
 
 print(heapq.heappop(h))
+```
+
+
+
+### [21939 문제 추천 시스템 Version 1](https://www.acmicpc.net/problem/21939)
+
+문제) "문제 번호, 난이도"가 주어졌을 때, 각 명령문을 수행한다. 명령어는 총 3가지가 있다.
+
+- `recommend x`
+
+  - x가 1인 경우 추천 문제 리스트에서 가장 어려운 문제의 번호를 출력한다.
+
+    만약 가장 어려운 문제가 여러 개라면 문제 번호가 큰 것으로 출력한다.
+
+  - x가 -1인 경우 추천 문제 리스트에서 가장 쉬운 문제의 번호를 출력한다.
+
+    만약 가장 쉬운 문제가 여러 개라면 문제 번호가 작은 것으로 출력한다. 
+
+- `add P L`
+  - 추천 문제 리스트에 난이도가 L인 문제 번호 P를 추가한다. **(제거되었던 문제 번호가 또 들어올 수 있다)**
+- `solved P`
+  - 추천 문제 리스트에서 문제 번호 P를 제거한다.
+
+분류) 자료 구조 - Heap (최소 힙, 최대 힙)
+
+해설) 최대 힙을 이용해 문제를 어렵고 문제 번호가 큰 순으로 저장하고, 최소 힙을 이용해 문제를 쉽고 문제 번호가 작은 순으로 저장한다. `solved`가 관건인데, 문제를 직접 삭제하면 시간 초과가 발생하므로, 삭제하지 말고 **dictionary를 활용**한다! (제거되었던 문제 번호가 또 들어올 수도 있다고 명시해준 것이 힌트인 것 같기도 하다) 시간 초과 방지를 위해 for문 없이, `O(logn)`의 시간복잡도를 가진 힙의 기본 연산인 `heappush()`와 `heappop()`만을 이용해서 어떻게 문제를 해결할 수 있을까?를 잘 고민해보는 것이 중요한 것 같다. 
+
+dictionary `d`의 key, value에 문제 번호 P와 난이도 L을 저장하고, `solved` 수행 시에는 `d[p]=0`를 통해 해당 문제 번호가 없음을 나타내서 `d`에 최신 문제 번호, 난이도 쌍을 저장한다. 그리고 `recommend` 수행 시에만 삭제된 문제 번호를 확인하면 된다. x=1일 때로 예시를 들어보자. 최대힙에 있는 최댓값(p, l)에 있는 난이도 `l`과 `d`에 저장된 난이도 `d[p]`를 비교했을 때, 두 값이 다르다면 이미 삭제된 문제다. 이때 `heappop`을 해서 `solved`가 수행됐던 문제를 제거해준다.
+
+참고) `heapq 모듈`을 잘 쓰자!
+
+- `heapq`에 튜플을 넣었을 때, 첫 번째 원소 값이 같다면 두 번째 원소를 비교해서 정렬해준다! (친절한 `heapq` 모듈이 알아서 해주니까 두 번째 원소를 내가 정렬하려고 애쓸 필요 없다...)
+- 가장 작은 값을 peek하고 싶으면 첫 번째 원소를 인덱싱하면 된다 (`heappop()`후에 `heappush()`할 필요 없다)
+
+메모) 문제를 직접 제거하지 않고, dictionary를 활용한다는 컨셉을 혼자 생각해내지 못했다. 
+
+```python
+import sys
+import heapq
+
+min_heap = []
+max_heap = []
+d = {}
+
+def recommend(x):
+  global min_heap, max_heap
+  if x==1:		# max(가장 어려운 문제의 번호)
+    while (-1)*max_heap[0][0] != d[(-1)*max_heap[0][1]]:
+      heapq.heappop(max_heap)
+    print((-1)*max_heap[0][1])
+  elif x==-1:	# min(가장 쉬운 문제의 번호)
+    while min_heap[0][0] != d[min_heap[0][1]]:
+      heapq.heappop(min_heap)
+    print(min_heap[0][1])
+          
+def add(p, l):
+  global min_heap, max_heap
+  heapq.heappush(min_heap, (l, p))
+  heapq.heappush(max_heap, ((-1)*l, (-1)*p))
+  d[p] = l
+
+def solved(p):
+  d[p] = 0
+
+read = sys.stdin.readline
+N = int(read())
+for _ in range(N):
+  P, L = map(int, read().split())
+  heapq.heappush(min_heap, (L, P))
+  heapq.heappush(max_heap, ((-1)*L, (-1)*P))
+  d[P] = L
+
+M = int(read())
+for _ in range(M):
+  command = read().split()
+  if command[0] == "recommend":
+    recommend(int(command[1]))
+  elif command[0] == "add":
+    add(int(command[1]), int(command[2]))
+  elif command[0] == "solved":
+    solved(int(command[1]))
 ```
 
 
