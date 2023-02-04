@@ -1,9 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-// https://www.acmicpc.net/problem/2075
-
-class Main {
+public class Main {
     public static void main(String[] args) throws Exception {
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
