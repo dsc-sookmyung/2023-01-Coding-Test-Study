@@ -18,7 +18,7 @@ public class Main {
             arr[i] = Integer.parseInt(br.readLine());
         }
 
-        //최대 중량이 제일 큰 로프순으로 써내서, 순서대로 병렬로 연결
+        //최대 중량이 제일 큰 로프순으로 꺼내서, 순서대로 병렬로 연결
         Arrays.sort(arr);
         int result = 0;
 
