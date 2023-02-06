@@ -149,3 +149,61 @@ for i in range(1, city_count - 1):
 
 print(min_total_price)
 ```
+
+# [20365 블로그2](https://www.acmicpc.net/problem/20365)
+
+> 접근 방법
+
+최소한의 작업 횟수로 문제를 색칠해야한다. 색칠은 색이 바뀌는 경우에 해야한다. 가장 적은 횟수로 색칠을 하려면 전환이 적은 색(더 길게 연속인 색)으로 전체를 칠하고, 전환 횟수가 많은 색을 부분적으로 칠한다. 따라서 색칠의 최소 횟수는 빨강과 파랑의 연속 끊기는 횟수 중 작은 것 + 1(전체 칠하기)이다. 말로 풀어서 설명하니까 왤케 어렵게 느껴지지? 구현 아이디어는 아주 간단하다.
+
+
+```python
+task_count = int(input())
+pattern = input()
+
+# 연속된 경우 제외하고 첫 문자 개수만 세어야함
+paint_count = {'B': 0,'R': 0}
+
+paint_count[pattern[0]] += 1
+
+for i in range(1, task_count):
+  if pattern[i] != pattern[i-1]:
+    paint_count[pattern[i]] += 1
+
+print(min(paint_count.values()) + 1)
+```
+
+
+# [1541 잃어버린 괄호](https://www.acmicpc.net/problem/1541)
+
+> 접근 방법
+
+계산 결과가 최소가 되려면 마이너스 다음에 오는 숫자가 커져야 한다. 마이너스와 마이너스 사이의 숫자를 모두 괄호로 묶어서 빼주면 반드시 최솟값을 얻을 수 있다.
+
+> 오류 : 런타임 에러
+
+이번에는 입력 부분에 문제가 없어보이는데 왜 런타임 에러가 났을까!! 예제3의 `00009-00009` 를 입력해보니 오류가 나더라.
+알고보니 내가 사용한 파이썬의 eval() 내장함수는 0으로 시작하는 정수는 읽을 수 없어 발생한 문제라고.
+그래서 그냥 덧셈할 숫자를 리스트로 받아 값을 계산하는 커스텀 함수를 작성해주었다. 끝!
+
+
+```python
+def calculate_term(term):
+  plus_numbers = term.split('+')
+  result = 0
+  for number in plus_numbers:
+    result += int(number)
+  return result
+
+expression = input()
+plus_term = expression.split('-')
+
+result = calculate_term(plus_term[0])
+for i in range(1, len(plus_term)):
+  # eval은 0으로 시작하는 숫자는 못 읽더라
+  # result -= eval(plus_term[i])
+  result -= calculate_term(plus_term[i])
+
+print(result)
+```
+
