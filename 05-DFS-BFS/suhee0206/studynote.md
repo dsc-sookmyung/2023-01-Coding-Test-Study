@@ -28,7 +28,7 @@
 
 대표적인 탐색 알고리즘으로 DFS와 BFS를 꼽을 수 있는데, DFS와 BFS를 제대로 이해하려면 기본 자료구조인 스택과 큐에 대한 이해가 전제되어야 한다.
 
-스택과 큐 설명은 [Stack, Queue, Deque 스터디 노트](../Week1_Stack-Queue-Deque/studynote.md)를 참고하자.
+스택과 큐 설명은 [Stack, Queue, Deque 스터디 노트](../../01-DataStructure1/suhee0206/studynote.md)를 참고하자.
 
 ### 재귀 함수
 
