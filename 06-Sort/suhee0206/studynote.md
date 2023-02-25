@@ -19,6 +19,7 @@
   - [10814 나이순 정렬](#10814-나이순-정렬)
   - [11652 카드](#11652-카드)
   - [18870 좌표 압축](#18870-좌표-압축)
+  - [2108 통계학](#2108-통계학)
 
 
 
@@ -337,5 +338,57 @@ for i in range(len(sorted_x_list)):
 
 for x in x_list:
   print(dict[x], end=' ')
+```
+
+
+
+### [2108 통계학](https://www.acmicpc.net/problem/2108)
+
+문제) N개의 수가 주어졌을 때, 네 가지 기본 통계값인 산술평균, 중앙값, 최빈값, 범위를 구하라.
+
+분류) 정렬
+
+해설) 파이썬의 라이브러리로 간단하게 해결이 가능하다. 
+
+- 산술평균:  `sum` 메서드를 이용해 수의 합을 구하고, 수의 개수로 나눠준 후에, `round` 메서드를 이용해 소수점 이하 첫째 자리에서 반올림한 값을 리턴한다.
+- 중앙값: 수를 정렬한 후에, 가운데 인덱스에 해당하는 값을 리턴한다.
+- 최빈값: 수를 정렬한 후에, `Counter` 를 이용해 수의 개수를 센다. 수를 정렬하는 이유는, 최빈값이 여러 개 있을 때 최빈값 중 두 번째로 작은 값을 출력하기 위함이다. 최빈값은 `Counter`의 `most_common` 메서드를 이용하여 구하고, 최빈값이 여러 개인 경우에는 두 번째로 작은 값을, 한 개인 경우에는 그 값을 출력한다. `most_common` 메서드 사용법은 [11652 카드](#11652-카드) 문제 해설을 참고하자.
+- 범위: `max` 메서드를 이용해 가장 큰 수를 구하고, `min` 메서드를 이용해 가장 작은 수를 구해서 두 값을 빼준다. 
+
+```python
+import sys
+import math
+from collections import Counter
+
+read = sys.stdin.readline
+N = int(read())
+
+numbers = []
+for _ in range(N):
+  numbers.append(int(read()))
+
+def mean(array):
+  return round(sum(array) / len(array))
+
+def median(array):
+  array.sort()
+  return array[int(len(array) / 2)]
+
+def mode(array):
+  array.sort()
+  counter = Counter(array)
+  two_modes = counter.most_common(2)
+  if len(two_modes) == 2 and two_modes[0][1] == two_modes[1][1]:
+    return two_modes[1][0]
+  else:
+    return two_modes[0][0]
+
+def sub_max_min(array):
+  return max(array) - min(array)
+
+print(mean(numbers))
+print(median(numbers))
+print(mode(numbers))
+print(sub_max_min(numbers))
 ```
 
