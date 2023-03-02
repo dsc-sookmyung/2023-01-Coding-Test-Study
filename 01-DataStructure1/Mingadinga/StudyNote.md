@@ -137,3 +137,298 @@ pss = [read().rstrip() for _ in range(t)]
 for ps in pss:
   check_vps(ps)
 ```
+
+
+# [18258 큐2](https://www.acmicpc.net/problem/18258)
+
+> 접근 방법
+
+입력받은 명령어에 따라 큐 연산을 실행해야 한다.
+간단하게 큐를 구현할 수 있는 deque 라이브러리를 사용했다.
+큐는 popleft(), append() 명령어를 사용한다. 개수는 len(deque)를 사용하고, deque에 요소가 들어있는지 여부는 null 판별로 구분할 수 있다.
+
+> 통과한 코드
+
+```python
+import sys
+from collections import deque
+
+read = sys.stdin.readline
+
+queue = deque()
+n = int(read())
+
+for _ in range(n):
+  command = read().rstrip()
+  if command == "pop":
+    if queue:
+      print(queue.popleft())
+    else:
+      print(-1)
+  elif command[0] == "p":
+    push, item = map(str, command.split())
+    queue.append(item)
+  elif command[0] == "f":
+    if queue:
+      print(queue[0])
+    else:
+      print(-1)
+  elif command[0] == "b":
+    if queue:
+      print(queue[len(queue)-1])
+    else:
+      print(-1)
+  elif command[0] == "s":
+    print(len(queue))
+  elif command[0] == "e":
+    print(1 if len(queue) == 0 else 0)
+  
+```
+
+
+# [2164 카드2](https://www.acmicpc.net/problem/2164)
+
+> 접근 방법
+
+제일 위에 있는 것부터 꺼낸다고 하길래 스택인 줄 알고 신나게 코드를 짰는데
+위에 있는걸 아래에 다시 넣는 연산에서 appendleft()를 쓰고 있는 것이었다.. 뭔가 이상해서 연산 순서를 써봤더니
+큐로 푸는게 맞았다. ㅎㅋㅎㅋ
+역시 손으로 풀어봐야 제맛
+
+> 통과한 코드
+
+```python
+import sys
+from collections import deque
+
+read = sys.stdin.readline
+
+n = int(read())
+stack = deque([i for i in range(n, 0, -1)])
+
+while stack:
+  stack.pop()
+  if len(stack) == 1:
+    print(stack.pop())
+    break
+  stack.appendleft(stack.pop())
+```
+
+# [1936 후위 표기식2](https://www.acmicpc.net/problem/1936)
+
+> 접근 방법
+
+후위 표기식은 뒤에서부터 탐색을 시작해 먼저 나온 연산자와 두개의 피연산자를 계산하는 방식이다.
+선입선출이 되어야하므로 스택을 사용했다. 변수와 숫자를 관리해야했는데, 변수는 A부터 Z까지 순서대로 나온다고 했으므로
+값을 리스트에 저장해두고 아스키코드 값의 차이를 이용해 인덱스에 접근했다.
+eval() 함수를 이용할까 하다가 시간복잡도가 O(N)이라는거 보고 그냥 조건문 돌렸다.
+
+> 통과한 코드
+
+```python
+import sys
+from collections import deque
+
+read = sys.stdin.readline
+stack = deque()
+
+n = int(read())
+expression = read().rstrip()
+number = [int(read().rstrip()) for _ in range(n)]
+
+for token in expression:
+  if token >= 'A' and token <= 'Z':
+    stack.append(number[ord(token)-ord('A')])
+  else:
+    second = stack.pop()
+    first = stack.pop()
+    if token == '+':
+      stack.append(first + second)
+    elif token == '-':
+      stack.append(first - second)
+    elif token == '*':
+      stack.append(first * second)
+    elif token == '/':
+      stack.append(first / second)
+
+print("{:.2f}".format(stack.pop()))
+```
+
+
+# [2346 풍선 터뜨리기](https://www.acmicpc.net/problem/2346)
+
+> 접근 방법
+
+인덱스 순환이 있길래 보자마자 순환 큐가 떠올랐으나
+저번에 비슷한 문제에서 리스트 제거로 쉽게 푼 문제가 생각나서 리스트로 열심히 뽑아보았다.
+그러나 원래 인덱스를 복원할 방법이 없어서 풀다가 포기.. 구글링해서 순환 큐로 다시 풀었다.
+순환 큐로 푸니 복잡한 인덱스 계산 과정이 필요하지 않아서 아주 간단했다.
+
+
+> 통과한 코드
+
+```python
+import sys
+from collections import deque
+
+read = sys.stdin.readline
+n = int(read())
+balloons = list(map(int, read().split()))
+spin_queue = deque()
+result = []
+
+for i in range(len(balloons)):
+  spin_queue.append((i, balloons[i]))
+
+while spin_queue:
+  index, move_value = spin_queue.popleft()
+  result.append(index + 1)
+  if move_value > 0:
+    spin_queue.rotate(-(move_value - 1))
+  else:
+    spin_queue.rotate(-move_value)
+
+print(' '.join(map(str, result)))
+```
+
+
+# [2504 괄호의 값](https://www.acmicpc.net/problem/2504)
+
+> 배운 것
+
+코드에 예외 케이스와 조건문이 많아지면 뭔가 잘못됐다는 메시지를 수신할 수 있게 됐다.
+예제에 과적합되고 이해하기도 어렵고 연산 속도도 느려진다. 이럴 떈 내 코드의 문제를 찾아 개선하자.
+
+> 접근 방법
+
+이 문제.. 결국 못 풀었다. 구글링으로 정답 코드를 보고나서도 이해하는데 한참 걸렸다.
+처음에는 예제에 있는 문자열을 가지고 스택에서 괄호와 숫자를 함께 푸시하고 팝하는 방식으로 시나리오를 짜보았다.
+
+
+`예제 : (()[[]])([])`
+
+| input | stack |
+|-------| ----- |
+| (     | (                            |
+| (     | ((                           |
+| )     | (2                           |
+| [     | (2[                          |
+| [     | (2[[                         |
+| ]     | (2[[] -> (2[3                | 
+| ]     | (2[3] -> (2[3 -> (2 9 -> (11 |
+| )     | (11) -> ( 11 -> 2 11 -> 22   |
+| (     | 22(                          |
+| [     | 22([                         |
+| ]     | 22([] -> 22(3                |
+| )     | 22(3) -> 22 ( 3 -> 22 6 -> 28 |
+
+입력이 단독으로 (나 [이면 그냥 스택에 넣는다. 
+입력이 ()나 []이면 2나 3을 스택에 넣는다.
+입력이 )나 ]이면 짝인 괄호를 찾을 때까지 pop한다. 도중에 숫자가 나오면 킵해주고 숫자가 연속으로 나오면 현재 탐색 중인 괄호에 따라 곱하거나 더한다. 최종 연산 결과를 스택에 넣는다. 짝 괄호가 아닌 괄호가 나오면 0을 출력하고 끝낸다.
+
+-> 위의 시나리오를 코드로 구현하다보니 너무 복잡해져서 이건 뭔가 아니다 싶었다. 그래서 숫자를 스택에 같이 넣지 말고 temp를 따로 두어서 최종값을 더하는 방법으로 수정했다.
+
+| Input | stack | temp | result |
+|-------|-------|-------|--------|
+| ( | (     | 1 | 0      |
+| ( | ((    | 2 | 0      |
+|) | (     | 1 | 2      |
+|[ | ([    | 3 | 2      |
+|[ | ([[   | 9 | 2      |                   
+|] | ([    | 1 | 11      |             
+|] | (     | 1 | 11       |             
+|) |       | 1 |22 <- 소괄호를 뽑았으니 2를 곱해보자 |
+
+코드를 짜다보니 이건 뭔가 잘못됐다. 케이스가 너무 많이 쪼개졌다. 그리고 예제에 과적합한 풀이 방식이다. 그런데 … 여기서 뭘 어떻게 해야할지 모르겠어서 그냥 구글링을 했다. 머리가 너무 아팠기 때문. 구글링한 코드를 보고 컴파일 표를 다시 작성해봤다.
+
+| Input | stack  | temp | result |
+|-------|--------|-------|--------|
+| ( | (      | 2 | 0 |
+| ( | ((     | 4 | 0 |
+| ) | (      | 2 | 4 |
+| [ | ([     | 6 | 4 |
+| [ | ([[    | 18 | 4 |
+| ] | ([     | 6 | 22 |
+| ] | (      | 2 | 22 |
+| ) |        |  1 | 22 |
+| ( | (      |  2 | 22 |
+| [ | ([     |  6 | 22  |
+| ] | ( | 2 | 28  |
+| ) | | 1 | 28    |
+
+정답 코드의 알고리즘 진행은 내 직관과는 너무 달랐다. 도대체 이걸 어떻게 푸는건지.. 다들 사고 방식이 컴퓨터랑 동기화된건지 싶었다. 
+
+내가 놓쳤던 부분은 연속된 괄호가 아니더라도 시작 괄호가 나오면 곱해주고, 끝 괄호가 나왔을 때만 연속 괄호를 비교해서 최종결과에 반영하고 임시값을 복귀하는 것이다. 스택의 특성을 활용해서 임시값을 일관되게 바꿔주는 것이다. 이런 문제가 나오면 어떻게 풀어야할까?
+
+일단 작은 예제로 쪼개서 컴파일 표를 여러번 그려보는게 좋을 것 같다.
+
+| Input | stack | temp | result |
+|------|-----|-------|--------|
+| ( | ( | 1 | 0 |
+| [ | ([ | 3 | 0 |
+| ] | ( | 1 | 3 |
+| ) | | 1 | 6 <- 소괄호를 뽑았으니 2를 곱해보자 |
+
+위의 표는 내가 원래 풀었던 방식으로 컴파일 표를 작성했다. 계산이 일관적이지 않기 때문에 예외 케이스가 많아지고 예제에 과적합한 알고리즘이 만들어졌다. 정답 알고리즘으로 컴파일 표를 다시 그려보자.
+
+| Input | stack | temp | result |
+|-------|-------|-------|--------|
+| ( | ( | 2 | 0 |
+| [ | ([ | 6 | 0 |
+| ] | ( | 2 | 6 |
+| ) | | 1 | 6 |
+
+연산이 일관적이어서 예외 케이스가 많아지지 않고 코드도 깔끔해졌다. 물론 컴파일표를 그리다보면 직관과 많이 벗어난 코드가 된다. 
+나는 아직 알고리즘과 친숙하지 않은건지, 딱히 재능이 없어서 그런것인지 모르겠지만 처음부터 이런 계산 과정을 생각하긴 어려울 것 같다. 
+그렇다면 기존에 내가 생각했던 알고리즘의 문제를 찾아서 개선하는 방향으로 사고해야겠다고 결심했다.
+
+알고리즘 문제를 여러개 풀다보니, ***코드에 예외 케이스와 조건문이 많아지면 뭔가 잘못됐다는 메시지를 수신할 수 있게 됐다.
+예제에 과적합되고 이해하기도 어렵고 연산 속도도 느려진다. 이럴 떈 내 코드의 문제를 찾아 개선하자.***
+앞으로 문제 풀 때 활용할 수 있는 중요한 인사이트를 얻었다. 화이팅!
+
+
+```python
+import sys
+
+read = sys.stdin.readline
+brackets = read().rstrip()
+
+stack = []
+total = 0
+tmp = 1
+
+for i in range(len(brackets)):
+
+    if brackets[i] == "(":
+        stack.append(brackets[i])
+        tmp *= 2
+
+    elif brackets[i] == "[":
+        stack.append(brackets[i])
+        tmp *= 3
+
+    elif brackets[i] == ")":
+        if not stack or stack[-1] == "[":
+            total = 0
+            break
+        if brackets[i-1] == "(":
+            total += tmp
+        stack.pop()
+        tmp //= 2
+
+    else:
+        if not stack or stack[-1] == "(":
+            total = 0
+            break
+        if brackets[i-1] == "[":
+            total += tmp
+
+        stack.pop()
+        tmp //= 3
+
+if stack:
+    print(0)
+else:
+    print(total)
+```
+
