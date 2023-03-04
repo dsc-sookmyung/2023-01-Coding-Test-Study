@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 public class Main {
     public static void main(String[] args) throws IOException {
+
         /**
          * N -> 준규가 가지고 있는 수자 카드의 개수
          */

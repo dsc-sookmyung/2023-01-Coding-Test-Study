@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 public class Main {
     public static void main(String[] args) throws IOException {
+
         /**
          * N -> 도영이네 반의 학생 수
          * 학생 이름, 국어, 영어, 수학 점수

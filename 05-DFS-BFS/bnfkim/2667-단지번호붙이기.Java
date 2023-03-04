@@ -67,7 +67,6 @@ public class Main {
             }
         }
     }
-
     private static boolean check() {
         return (nowX >= 0 && nowX < N && nowY >= 0 && nowY <N);
     }

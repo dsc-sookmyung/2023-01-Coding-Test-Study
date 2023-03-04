@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 public class Main {
     public static void main(String[] args) throws IOException {
+
         /**
          * N -> 온라인 저지 회원 수
          * 나이, 이름
