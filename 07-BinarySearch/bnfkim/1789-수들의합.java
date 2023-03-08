@@ -1,5 +1,6 @@
 import java.io.*;
 public class Main {
+
     public static void main(String[] args) throws IOException {
         /**
          * N -> 서로 다른 자연수의 개수
