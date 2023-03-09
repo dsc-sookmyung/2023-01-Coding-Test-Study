@@ -106,3 +106,84 @@ for i in range(t):
 ```
 
 
+# [9084 동전](https://www.acmicpc.net/problem/9084)
+
+> 접근 방법
+
+부분합이 전체합에 포함되므로 dp를 사용할 수 있다.
+무슨 말이냐면 화폐 단위가 2원, 5원 있을 때 9원을 만드는 경우의 수에 7원을 만드는 경우의 수가 그대로 포함된다.
+
+- dp[k] : k원을 만들 수 있는 경우의 수
+- 점화식 : 현재 탐색 중인 화폐 단위 coin에 대하여
+  - (k - coin)원을 만들 수 있는 경우의 수가 존재하면 그대로 누적합
+  - 경우의 수가 존재하지 않으면 패스
+- 초기화 : dp[0] = 1
+
+
+> 통과한 코드
+
+```python
+import sys
+
+read = sys.stdin.readline
+
+
+def combination_count(coins, target):
+    dp = [0 for _ in range(target + 1)]
+    dp[0] = 1
+    for coin in coins:
+        for k in range(target + 1):
+            if k >= coin:
+                dp[k] += dp[k - coin]
+
+    return dp[target]
+
+
+t = int(read())
+
+for _ in range(t):
+    n = int(read())
+    coins = list(map(int, read().split()))
+    m = int(read())
+    print(combination_count(coins, m))
+
+```
+
+
+# [9655 돌게임](https://www.acmicpc.net/problem/9655)
+
+> 접근 방식
+
+dp[i] : i번째 돌을 마지막으로 가져갔을 때 상근이가 이기는가(1)
+- dp[1] = 1
+- dp[2] = 0
+- dp[3] = 1
+...
+
+점화식
+- dp[i-3] 혹은 dp[i-1]이 1이면 dp[i]은 0이다 
+- dp[i] = dp[i-1] or dp[i-3]
+
+> 통과한 코드
+
+```python
+import sys
+
+read = sys.stdin.readline
+
+n = int(read())
+dp = [-1 for _ in range(n+1)]
+
+if n < 4:
+  dp[n] = n % 2
+
+else:
+  dp[1] = 1
+  dp[2] = 0
+  dp[3] = 1
+
+for i in range(4, n+1):
+  dp[i] = not dp[i-1] or not dp[i-3]
+print('SK' if dp[n]==1 else 'CY')
+```
+
