@@ -187,3 +187,115 @@ for i in range(4, n+1):
 print('SK' if dp[n]==1 else 'CY')
 ```
 
+
+# [2839 설탕배달](https://www.acmicpc.net/problem/2839)
+
+> 접근 방식
+
+dp[i] : i 킬로그램의 설탕을 운반할 수 있는 최소 봉지 개수
+
+라고 놓고 아래와 같이 전개했다.
+
+- dp[1] = -1
+- dp[2] = -1
+- dp[3] = 1 (초기화)
+- dp[4] = -1 (정확하게 4 킬로그램을 만들 수 없다)
+- dp[5] = 1 (초기화)
+- dp[6] = 2 = 후보 : dp[3] + 1(2), dp[1] + 1 (0)
+- dp[7] = -1 =  후보 : dp[4] + 1(0), dp[2] + 1(0)
+- dp[8] = 2 = 후보 : dp[3] + 1(2), dp[5] + 1(2)
+- dp[9] = 3 = 후보 : dp[6] + 1(3), dp[4] + 1(0)
+- dp[10] = 2 = 후보 : dp[7] + 1(0), dp[5] + 1(2)
+- dp[11] = 3 = 후보 : dp[8] + 1(3), dp[6] + 1(3)
+- dp[12] = 4 = 후보 : dp[9] + 1(4), dp[7] + 1(0)
+- dp[13] = 3 = 후보 : dp[10] + 1(3), dp[8] + 1(3)
+- dp[15] = 3 = dp[12] + 1(5), dp[10] + 1(3) // 3 3 3 3 3 or 5 5 5
+
+점화식
+- 초기화 : 전부 -1, 3과 5는 1로
+- dp[i] = i 킬로그램의 설탕을 운반할 수 있는 최소 봉지 개수
+  - dp[i-3]+1과 dp[i-5]이 모두 0이면 : 만들 수 없으므로 -1 저장
+  - dp[i-3]+1과 dp[i-5]이 하나면 0이면 : 더 큰 것(0이 아닌 것)
+  - dp[i-3]+1과 dp[i-5]이 모두 0이 아니면 : 더 작은 것
+
+> 통과한 코드
+
+```python
+import sys
+
+read = sys.stdin.readline
+
+n = int(read())
+dp = [-1 for _ in range(5001)]
+
+dp[3], dp[5] = 1, 1
+for i in range(6, n+1):
+  taken_3 = dp[i-3] + 1
+  taken_5 = dp[i-5] + 1
+
+  temp = 0
+  # 둘다 0
+  if not taken_3 and not taken_5:
+    temp = -1
+  # 둘다 0 아님
+  elif taken_3 and taken_5:
+    temp = min(taken_3, taken_5)
+  # 하나만 0
+  else:
+    temp = max(taken_3, taken_5)
+  dp[i] = temp
+print(dp[n])
+```
+
+# [17626 Four Squares](https://www.acmicpc.net/problem/17626)
+
+> 접근 방식
+
+dp[i] : 합이 i가 되는 제곱수의 최소 개수
+
+dp[0] = 0
+dp[1] = 1 (1^2) (초기화)
+dp[2] = 2 = dp[1] + dp[1]
+dp[3] = 3 = dp[2] + dp[1]
+=====
+dp[4] = 1 (2^2) (초기화)
+dp[5] = 2 = min(dp[4] + dp[1], dp[1] + dp[4]) : 2, 2
+dp[6] = 3 = min(dp[4] + dp[2], dp[1] + dp[5]) : 3, 3
+dp[7] = 4 = min(dp[4] + dp[3], dp[1] + dp[6]) : 4, 4
+dp[8] = 2 = min(dp[4] + dp[4], dp[1] + dp[7]) : 2, 5
+=====
+dp[9] = 1 (3^2) (초기화)
+dp[10] = 2 = min(dp[9] + dp[1], dp[4] + dp[6], dp[1] + dp[9]) : 2, 4, 2
+dp[11] = 3 = min(dp[9] + dp[2], dp[4] + dp[7], dp[1] + dp[10]) : 3, 5, 3
+dp[12] = 3 = min(dp[9] + dp[3], dp[4] + dp[8], dp[1] + dp[11]) : 4, 3, 4
+dp[13] = 2 = min(dp[9] + dp[4], dp[4] + dp[9], dp[1] + dp[12]) : 2, 2, 4
+dp[14] = 3 = min(dp[9] + dp[5], dp[4] + dp[10], dp[1] + dp[13]) : 3, 3, 3
+
+점화식
+- dp[0] = 0, dp[1] = 1
+- dp[i] = min(dp[i-(i보다 작은 제곱수*)]+1)
+
+
+> 통과한 코드
+
+```python
+import sys
+import math
+
+read = sys.stdin.readline
+
+INF = 50001
+n = int(read())
+dp = [0, 1]
+
+for i in range(2, n+1):
+  min_value = INF
+  for j in range(1, int(math.sqrt(i)) + 1):
+    min_value = min(min_value, dp[i-j*j]+1)
+  dp.append(min_value)
+print(dp[n])
+```
+
+
+
+
