@@ -111,6 +111,8 @@ for item in sorted_extension_dict:
 
 메모) 처음에 `슬라이싱`을 이용하지 않고, `copy`를 import 해와서 `copy.deepcopy`와 `pop()`을 사용해서 풀었더니 시간 초과가 발생했다. 
 
+참고) 좋은 반례 : https://www.acmicpc.net/board/view/83790
+
 ```python
 import sys
 
